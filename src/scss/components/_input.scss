@@ -1,0 +1,37 @@
+.input_wrap {
+    position: relative;
+    display: inline-block;
+    margin-top: 15px;
+
+    .input {
+        padding: 8px 30px;
+        border: 1px solid black;
+        border-radius: 10px;
+        opacity: 0.2;
+
+        &:focus {
+            opacity: 0.5;
+        }
+    }
+
+    .input::placeholder {
+        color: black;
+    }
+
+    .search, .close {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+    }
+
+    .search {
+        top: 10px;
+        left: 10px;
+    }
+
+    .close {
+        cursor: pointer;
+        top: 12px;
+        right: 10px;
+    }
+}

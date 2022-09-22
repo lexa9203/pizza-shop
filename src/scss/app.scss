@@ -309,3 +309,41 @@ body {
     }
   }
 }
+
+.paggination {
+  display: flex;
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #fe5f1e;
+    margin-right: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  a:hover {
+    background-color: #ff7f4d;
+    color: #fff
+  }
+  
+  .selected {
+    a {
+      background-color: #ff7f4d;
+      color: #fff
+    }
+  }
+  .disabled {
+    a {
+      cursor: default;
+    }
+    a:hover {
+      border: 1px solid #fe5f1e;
+      background-color: #fff;
+      color: #000
+    }
+  }
+}

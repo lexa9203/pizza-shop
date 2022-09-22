@@ -1,11 +1,22 @@
 import logo from '../assets/img/pizza-logo.svg';
 import { Link } from 'react-router-dom';
+import { setActiveCategory, setSort, setOrder } from '../redux/slice/filterSlice';
+import { setPage } from '../redux/slice/paginateSlice';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
+  const dispatch = useDispatch();
+
+  const navigateHome = () => {
+    dispatch(setActiveCategory('all'));
+    dispatch(setSort({ name: 'популярности', sortTitle: 'rating' }));
+    dispatch(setOrder(true));
+    dispatch(setPage(1));
+  };
   return (
     <div className="header">
       <div className="container">
-        <Link to="/">
+        <Link to="/" onClick={navigateHome}>
           <div className="header__logo">
             <img width="38" src={logo} alt="Pizza logo" />
             <div>
