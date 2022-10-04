@@ -1,23 +1,23 @@
-import React, { useCallback, useContext, useRef, useState } from 'react';
-import { SearchContext } from '../pages/Home';
+import React, { useCallback, useRef, useState } from 'react';
 import { setPage } from '../redux/slice/paginateSlice';
+import { setSearch } from '../redux/slice/filterSlice';
 import { useDispatch } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 const Input = () => {
   const [value, setValue] = useState('');
-  const { setSearchValue } = useContext(SearchContext);
+
   const inputRef = useRef();
   const dispatch = useDispatch();
 
   const updateSearchValueOnDebounse = useCallback(
     debounce((str) => {
-      setSearchValue(str);
+      dispatch(setSearch(str));
     }, 400),
     [],
   );
   const clearInput = () => {
-    setSearchValue('');
+    dispatch(setSearch(''));
     setValue('');
     inputRef.current.focus();
   };

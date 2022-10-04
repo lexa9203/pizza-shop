@@ -2,10 +2,14 @@ import logo from '../assets/img/pizza-logo.svg';
 import { Link } from 'react-router-dom';
 import { setActiveCategory, setSort, setOrder } from '../redux/slice/filterSlice';
 import { setPage } from '../redux/slice/paginateSlice';
-import { useDispatch } from 'react-redux';
+import { selectorCart } from '../redux/slice/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Header = () => {
   const dispatch = useDispatch();
+  const { totalPrice, cartItems } = useSelector(selectorCart);
+
+  const count = cartItems.reduce((sum, item) => sum + item.count, 0);
 
   const navigateHome = () => {
     dispatch(setActiveCategory('all'));
@@ -27,7 +31,7 @@ const Header = () => {
         </Link>
         <div className="header__cart">
           <Link className="button button--cart" to="cart">
-            <span>520 ₽</span>
+            <span>{totalPrice} ₽</span>
             <div className="button__delimiter"></div>
             <svg
               width="18"
@@ -57,7 +61,7 @@ const Header = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <span>3</span>
+            <span>{count}</span>
           </Link>
         </div>
       </div>

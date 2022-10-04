@@ -1,7 +1,6 @@
-import React, { useState, useEffect, createContext, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import qs from 'qs';
 
 import Categories from '../components/Categories';
@@ -13,13 +12,9 @@ import Paginate from '../components/Paginate';
 import { setActiveCategory, setSort, setOrder } from '../redux/slice/filterSlice';
 import { setPage } from '../redux/slice/paginateSlice';
 import { sortList } from '../components/Sort';
-
-export const SearchContext = createContext('');
+import { fetchPizzas } from '../redux/slice/pizzaSlice';
 
 const Home = () => {
-  const [pizzas, setPizzas] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchValue, setSearchValue] = useState('');
   /* при первом рендере не изменять url в зависимости от фильтров */
   const isMounted = useRef(false);
   const queryFilters = useRef(false);
@@ -29,27 +24,15 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const page = useSelector((state) => state.paginate.page);
-  const { activeCategory, sort, order } = useSelector((state) => state.filter);
+  const { items, status } = useSelector((state) => state.pizza);
 
-  const getData = () => {
+  const { activeCategory, sort, order, search } = useSelector((state) => state.filter);
+
+  const getData = async () => {
     const category = activeCategory !== 'all' ? activeCategory : '';
-    setIsLoading(true);
-    axios
-      .get(
-        `https://6321e67782f8687273bc24b7.mockapi.io/pizzas?page=${page}&limit=8${
-          category ? '&category=' + category : ''
-        }&sortBy=${sort.sortTitle}&order=${order ? 'desc' : 'asc'}${
-          searchValue && '&search=' + searchValue
-        }`,
-      )
-      .then((res) => {
-        setPizzas(res.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(true);
-      });
+
+    dispatch(fetchPizzas({ page, category, sort, order, search }));
+
     window.scrollTo(0, 0);
   };
   /* проверка есть ли данные в url */
@@ -70,7 +53,7 @@ const Home = () => {
       getData();
     }
     queryFilters.current = false;
-  }, [activeCategory, order, sort, page, searchValue]);
+  }, [activeCategory, order, sort, page, search]);
 
   /* при первом рендере не показзывать фильтра в url */
   useEffect(() => {
@@ -92,25 +75,28 @@ const Home = () => {
         <Categories />
         <Sort />
       </div>
-      <SearchContext.Provider value={{ searchValue, setSearchValue }}>
-        <Input />
-      </SearchContext.Provider>
+      <Input />
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {isLoading
-          ? [...new Array(8)].map((_, index) => <Loader key={index} />)
-          : pizzas.map((el) => (
-              <PizzaBlock
-                key={el.id}
-                title={el.title}
-                price={el.price}
-                imgUrl={el.imageUrl}
-                sizes={el.sizes}
-                types={el.types}
-              />
-            ))}
+        {status === 'error' ? (
+          <div>error</div>
+        ) : status === 'loading' ? (
+          [...new Array(8)].map((_, index) => <Loader key={index} />)
+        ) : (
+          items.map((el) => (
+            <PizzaBlock
+              key={el.id}
+              id={el.id}
+              title={el.title}
+              price={el.price}
+              imgUrl={el.imageUrl}
+              sizes={el.sizes}
+              types={el.types}
+            />
+          ))
+        )}
       </div>
-      <Paginate />
+      {status === 'success' && <Paginate />}
     </>
   );
 };

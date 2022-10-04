@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Header from './components/Header';
 import Cart from './pages/Cart';
 import NotFound from './pages/NotFound';
+import Pizza from './pages/Pizza';
 
 import './scss/app.scss';
 
@@ -17,6 +18,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/pizzas/:id" element={<Pizza />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

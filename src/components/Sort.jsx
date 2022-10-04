@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { setSort, setOrder } from '../redux/slice/filterSlice';
@@ -12,6 +12,7 @@ export const sortList = [
 const Sort = () => {
   const sortValue = useSelector((state) => state.filter.sort);
   const order = useSelector((state) => state.filter.order);
+  const sortRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -22,8 +23,22 @@ const Sort = () => {
     setShowSort(false);
   };
 
+  const onClickSort = (event) => {
+    if (!event.composedPath().includes(sortRef.current)) {
+      setShowSort(false);
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('click', onClickSort);
+    /* удаление обработчика при Unmount */
+    return () => {
+      document.body.removeEventListener('click', onClickSort);
+    };
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           className={!order ? 'sort__rotate' : ''}
