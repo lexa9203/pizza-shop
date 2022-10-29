@@ -3,27 +3,32 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setSort, setOrder } from '../redux/slice/filterSlice';
 
-export const sortList = [
+interface ISortList {
+  name: string; 
+  sortTitle: string;
+}
+
+export const sortList: ISortList[] = [
   { name: 'популярности', sortTitle: 'rating' },
   { name: 'цене', sortTitle: 'price' },
   { name: 'алфавиту', sortTitle: 'title' },
 ];
 
-const Sort = () => {
-  const sortValue = useSelector((state) => state.filter.sort);
-  const order = useSelector((state) => state.filter.order);
-  const sortRef = useRef();
+const Sort: React.FC = () => {
+  const sortValue = useSelector((state: any) => state.filter.sort);
+  const order = useSelector((state: any) => state.filter.order);
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
   const [showSort, setShowSort] = useState(false);
 
-  const selectSort = (obj) => {
+  const selectSort = (obj: ISortList) => {
     dispatch(setSort(obj));
     setShowSort(false);
   };
 
-  const onClickSort = (event) => {
+  const onClickSort = (event: any) => {
     if (!event.composedPath().includes(sortRef.current)) {
       setShowSort(false);
     }

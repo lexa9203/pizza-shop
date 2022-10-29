@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setPage } from '../redux/slice/paginateSlice';
 
-const Paginate = () => {
-  const page = useSelector((state) => state.paginate.page);
+const Paginate: React.FC = () => {
+  const page = useSelector((state: any) => state.paginate.page);
   const dispatch = useDispatch();
   return (
     <ReactPaginate
@@ -19,7 +19,6 @@ const Paginate = () => {
       pageRangeDisplayed={8}
       pageCount={3}
       previousLabel="<"
-      renderOnZeroPageCount={null}
     />
   );
 };

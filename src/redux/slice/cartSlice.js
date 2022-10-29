@@ -10,6 +10,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart(state, action) {
+      console.log(action.payload);
       const findItem = state.cartItems.find(
         (el) =>
           el.sizes === action.payload.sizes &&
@@ -19,11 +20,10 @@ const cartSlice = createSlice({
 
       if (findItem) {
         findItem.count++;
-        state.totalPrice += findItem.price;
       } else {
         state.cartItems.push({ ...action.payload, count: 1 });
-        state.totalPrice = state.cartItems.reduce((sum, obj) => (sum += obj.price), 0);
       }
+      state.totalPrice = state.cartItems.reduce((sum, obj) => (sum += obj.price * obj.count), 0);
     },
 
     removeItem(state, action) {
@@ -37,11 +37,13 @@ const cartSlice = createSlice({
       const findPizza = state.cartItems.find((item) => {
         return item.key === action.payload;
       });
-      findPizza.count--;
-      if (!findPizza.count) {
-        state.cartItems = state.cartItems.filter((el) => el.key !== findPizza.key);
+      if (findPizza) {
+        findPizza.count--;
+        if (!findPizza.count) {
+          state.cartItems = state.cartItems.filter((el) => el.key !== findPizza.key);
+        }
+        state.totalPrice = state.cartItems.reduce((sum, obj) => (sum += obj.price * obj.count), 0);
       }
-      state.totalPrice = state.cartItems.reduce((sum, obj) => (sum += obj.price * obj.count), 0);
     },
 
     clearItems(state) {

@@ -13,8 +13,9 @@ import { setActiveCategory, setSort, setOrder } from '../redux/slice/filterSlice
 import { setPage } from '../redux/slice/paginateSlice';
 import { sortList } from '../components/Sort';
 import { fetchPizzas } from '../redux/slice/pizzaSlice';
+import { IItemCart } from '../components/ItemCart';
 
-const Home = () => {
+const Home: React.FC = () => {
   /* при первом рендере не изменять url в зависимости от фильтров */
   const isMounted = useRef(false);
   const queryFilters = useRef(false);
@@ -23,14 +24,14 @@ const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const page = useSelector((state) => state.paginate.page);
-  const { items, status } = useSelector((state) => state.pizza);
+  const page = useSelector((state: any) => state.paginate.page);
+  const { items, status } = useSelector((state: any) => state.pizza);
 
-  const { activeCategory, sort, order, search } = useSelector((state) => state.filter);
+  const { activeCategory, sort, order, search } = useSelector((state: any) => state.filter);
 
   const getData = async () => {
     const category = activeCategory !== 'all' ? activeCategory : '';
-
+    //@ts-ignore
     dispatch(fetchPizzas({ page, category, sort, order, search }));
 
     window.scrollTo(0, 0);
@@ -83,7 +84,7 @@ const Home = () => {
         ) : status === 'loading' ? (
           [...new Array(8)].map((_, index) => <Loader key={index} />)
         ) : (
-          items.map((el) => (
+          items.map((el: any) => (
             <PizzaBlock
               key={el.id}
               id={el.id}

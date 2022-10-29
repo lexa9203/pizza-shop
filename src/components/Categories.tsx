@@ -11,8 +11,9 @@ const categories = [
   { id: 5, name: 'Острая', translite: 'spicy' },
   { id: 6, name: 'Закрытая', translite: 'close' },
 ];
-const Categories = () => {
-  const activeCategory = useSelector((state) => state.filter.activeCategory);
+
+const Categories: React.FC = () => {
+  const activeCategory = useSelector((state: any) => state.filter.activeCategory);
   const dispatch = useDispatch();
 
   return (

@@ -5,11 +5,11 @@ import { setPage } from '../redux/slice/paginateSlice';
 import { selectorCart } from '../redux/slice/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const Header = () => {
+const Header: React.FC = () => {
   const dispatch = useDispatch();
   const { totalPrice, cartItems } = useSelector(selectorCart);
 
-  const count = cartItems.reduce((sum, item) => sum + item.count, 0);
+  const count = cartItems.reduce((sum: number, item: any) => sum + item.count, 0);
 
   const navigateHome = () => {
     dispatch(setActiveCategory('all'));

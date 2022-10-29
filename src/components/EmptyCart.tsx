@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import empty from '../assets/img/empty-cart.png';
 
-const EmptyCart = () => {
+const EmptyCart: React.FC = () => {
   return (
     <div className="container activeType--cart">
       <div className="cart cart--empty">
